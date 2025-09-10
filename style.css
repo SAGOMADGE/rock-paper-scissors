@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+}
+
+body button {
+  margin-top: 50px;
+  font-size: 90px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border: none;
+  background: none;
+}
+
+button:hover {
+  transform: scale(1.15);
+}
+
+#displayResult {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 20px;
+  width: 300px;
+  height: auto;
+  background-color: none;
+  white-space: inherit;
+  position: absolute;
+  top: 200px;
+}
+
+#resetBtn {
+  top: 250px;
+  position: absolute;
+  font-size: 20px;
+  font-weight: 800;
+}

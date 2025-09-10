@@ -1,53 +1,60 @@
-let humanScore = 0;
+// Счетчики и флаг
+let playerScore = 0;
 let computerScore = 0;
+let gameOver = false;
 
+// Получаем элементы кнопок и див для результат
+const rockBtn = document.querySelector("#rock");
+const paperBtn = document.querySelector("#paper");
+const scissorsBtn = document.querySelector("#scissors");
+const displayResult = document.querySelector("#displayResult");
+const resetBtn = document.querySelector("#resetBtn");
+
+// Функция случайного выбора компьютера
 function getComputerChoice() {
-  const randomNumber = Math.floor(Math.random() * 3);
-  if (randomNumber === 0) {
-    return "rock";
-  } else if (randomNumber === 1) {
-    return "scissors";
-  } else {
-    return "paper";
-  }
+  const choices = ["rock", "paper", "scissors"];
+  const randomIndex = Math.floor(Math.random() * choices.length);
+  return choices[randomIndex];
 }
 
-function getHumanChoice() {
-  const humanChoice = prompt("Choose").toLowerCase();
-  return humanChoice;
-}
+// Основная функция раунда
+function playRound(playerSelection) {
+  if (gameOver) return;
 
-function playRound(humanChoice, computerChoice) {
-  console.log("Human chose:", humanChoice);
-  console.log("Computer chose:", computerChoice);
+  const ComputerSelection = getComputerChoice();
 
-  if (humanChoice === computerChoice) {
-    console.log("its a tie");
-  } else if (
-    (humanChoice === "rock" && computerChoice === "scissors") ||
-    (humanChoice === "paper" && computerChoice === "rock") ||
-    (humanChoice === "scissors" && computerChoice === "paper")
+  // Определяем победителя
+  if (
+    (playerSelection === "rock" && ComputerSelection === "scissors") ||
+    (playerSelection === "paper" && ComputerSelection === "rock") ||
+    (playerSelection === "scissors" && ComputerSelection === "paper")
   ) {
-    console.log(`You win! ${humanChoice} beats ${computerChoice}`);
-    humanScore++; // увеличиваем счет человека
+    playerScore++; // очко игроку за победу в раунде
+    displayResult.innerHTML = `Вы выиграли этот раунд!<br>Счет: ${playerScore} - ${computerScore}`;
+  } else if (playerSelection === ComputerSelection) {
+    displayResult.innerHTML = `Ничья!<br>Счет: ${playerScore} - ${computerScore} `;
   } else {
-    console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
-    computerScore++; // увеличиваем счет компьютера
+    computerScore++;
+    displayResult.innerHTML = `Компьютер выиграл раунд.<br>Счет: ${playerScore} - ${computerScore}`;
+  }
+
+  // Проверяем достиг ли кто то 5 очков
+  if (playerScore === 5) {
+    displayResult.textContent = `Поздравляю, вы победили! Финальный счет: ${playerScore} - ${computerScore}`;
+    gameOver = true;
+  } else if (computerScore === 5) {
+    displayResult.textContent = `Компьютер победил! Финальный счет: ${playerScore} - ${computerScore}`;
+    gameOver = true;
   }
 }
 
-playRound(getHumanChoice(), getComputerChoice());
-playRound(getHumanChoice(), getComputerChoice());
-playRound(getHumanChoice(), getComputerChoice());
-playRound(getHumanChoice(), getComputerChoice());
-playRound(getHumanChoice(), getComputerChoice());
-
-console.log("Final scores:", humanScore + "-" + computerScore);
-
-if (humanScore > computerScore) {
-  console.log(`Game is over! You won! ${humanScore} - ${computerScore}`);
-} else if (humanScore < computerScore) {
-  console.log(`Game is over! You lost! ${humanScore} - ${computerScore}`);
-} else {
-  console.log("Game is over! It is a tie!");
-}
+// Слушатели кнопок
+rockBtn.addEventListener("click", () => playRound("rock"));
+paperBtn.addEventListener("click", () => playRound("paper"));
+scissorsBtn.addEventListener("click", () => playRound("scissors"));
+resetBtn.addEventListener("click", () => {
+  playerScore = 0;
+  computerScore = 0;
+  gameOver = false;
+  displayResult.textContent = "Игра сброшена! Начнем заново!";
+});
